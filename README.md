@@ -18,7 +18,7 @@
 
 ### En Linux (Debian/Ubuntu)
 ```bash
-git clone https://github.com/Falconmx1/Mx-Root-Terminal.git
+git clone https://github.com/Falconmx1/Mx-Root-Terminal
 cd Mx-Root-Terminal
 chmod +x install.sh
 ./install.sh
@@ -28,7 +28,7 @@ Asegúrate de tener WSL2 con una distro de Linux (ej. Ubuntu).
 
 Abre tu terminal de WSL y ejecuta:
 
-git clone https://github.com/Falconmx1/Mx-Root-Terminal.git
+git clone https://github.com/Falconmx1/Mx-Root-Terminal
 cd Mx-Root-Terminal
 ./install.sh
 
