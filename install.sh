@@ -2,7 +2,7 @@
 
 # Mx Root Terminal - Script de Instalación
 # Autor: Falconmx1
-# Versión: 2.0.0
+# Versión: 3.0.0
 
 ROJO='\033[0;31m'
 VERDE='\033[0;32m'
@@ -29,10 +29,79 @@ else
 fi
 echo ""
 
-echo -e "${AZUL}➜ Actualizando paquetes e instalando herramientas...${NC}"
+echo -e "${AZUL}➜ Actualizando paquetes...${NC}"
 sudo apt update && sudo apt upgrade -y
+echo -e "${VERDE}   ✅ Sistema actualizado.${NC}"
+echo ""
+
+echo -e "${AZUL}➜ Instalando herramientas base...${NC}"
 sudo apt install -y zsh git wget curl nmap netdiscover hydra john gobuster nikto netcat-openbsd
-echo -e "${VERDE}   ✅ Herramientas instaladas correctamente.${NC}"
+echo -e "${VERDE}   ✅ Herramientas base instaladas.${NC}"
+echo ""
+
+echo -e "${AZUL}➜ Instalando herramientas adicionales (puede tomar varios minutos)...${NC}"
+sudo apt install -y \
+    aircrack-ng \
+    sqlmap \
+    wpscan \
+    recon-ng \
+    exploitdb \
+    dnsrecon \
+    enum4linux \
+    smbclient \
+    wireshark \
+    tcpdump \
+    whois \
+    dnsutils \
+    crunch \
+    cewl \
+    hashcat \
+    medusa \
+    xpdf \
+    foremost \
+    binwalk \
+    steghide \
+    exiftool \
+    ffmpeg \
+    yara \
+    clamav \
+    rkhunter \
+    chkrootkit \
+    lynis \
+    auditd \
+    debsums \
+    secure-delete \
+    macchanger \
+    torsocks \
+    proxychains \
+    iptables \
+    ufw \
+    fail2ban \
+    openssl \
+    sshpass \
+    scrot \
+    imagemagick
+
+echo -e "${VERDE}   ✅ Herramientas adicionales instaladas.${NC}"
+echo ""
+
+echo -e "${AMARILLO}⚠️  Instalando Metasploit Framework y Burp Suite (opcionales)...${NC}"
+echo -e "${AMARILLO}   Nota: Metasploit pesa ~500MB y puede tardar varios minutos.${NC}"
+read -p "¿Instalar Metasploit Framework? (s/N): " instalar_metasploit
+if [[ "$instalar_metasploit" =~ ^[sS]$ ]]; then
+    sudo apt install -y metasploit-framework
+    echo -e "${VERDE}   ✅ Metasploit Framework instalado.${NC}"
+else
+    echo -e "${AMARILLO}   ⏩ Saltando Metasploit Framework.${NC}"
+fi
+
+read -p "¿Instalar Burp Suite? (s/N): " instalar_burp
+if [[ "$instalar_burp" =~ ^[sS]$ ]]; then
+    sudo apt install -y burpsuite
+    echo -e "${VERDE}   ✅ Burp Suite instalado.${NC}"
+else
+    echo -e "${AMARILLO}   ⏩ Saltando Burp Suite.${NC}"
+fi
 echo ""
 
 echo -e "${AZUL}➜ Instalando Oh My Zsh...${NC}"
@@ -61,7 +130,8 @@ PROMPT='%{$fg[red]%}┌──(root㉿Mx)-[%{$fg[blue]%}%~%{$fg[red]%}]
 %{$fg[red]%}└─%{$reset_color%}# '
 
 alias mx='cd ~/Mx-Root-Terminal'
-alias mx-help='echo "Comandos Mx: mx-info, mx-update, mx-wifi, mx-scan, mx-clean"'
+alias mx-help='echo "Comandos Mx: mx-info, mx-update, mx-wifi, mx-scan, mx-clean, mx-test"'
+alias mx-tools='echo "Herramientas: nmap, hydra, john, gobuster, nikto, netdiscover, aircrack-ng, sqlmap, wpscan, recon-ng, dnsrecon, enum4linux, wireshark, tcpdump, whois, dig, crunch, cewl, hashcat, medusa"'
 
 EOF
 
@@ -70,7 +140,6 @@ echo ""
 
 echo -e "${AZUL}➜ Creando scripts Mx...${NC}"
 
-# Función para crear scripts
 create_script() {
     local script_name=$1
     local script_content=$2
@@ -79,7 +148,6 @@ create_script() {
     echo -e "${VERDE}   ✅ $script_name creado.${NC}"
 }
 
-# Script: mx-info (VERSIÓN CORREGIDA Y PROBADA)
 create_script "mx-info" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Info ===\033[0m"
 echo "Hostname: $(hostname)"
@@ -96,14 +164,13 @@ echo "Uptime: $(uptime -p)"
 echo "Shell: $SHELL"
 '
 
-# Script: mx-update
 create_script "mx-update" '#!/bin/bash
 echo -e "\033[0;31mActualizando herramientas de Mx Root Terminal...\033[0m"
 sudo apt update && sudo apt upgrade -y
+sudo apt autoremove -y
 echo -e "\033[0;32m✅ ¡Actualización completada!\033[0m"
 '
 
-# Script: mx-wifi
 create_script "mx-wifi" '#!/bin/bash
 echo -e "\033[0;31m=== Mx WiFi Scanner ===\033[0m"
 echo "Escaneando redes WiFi disponibles..."
@@ -120,7 +187,6 @@ else
 fi
 '
 
-# Script: mx-scan
 create_script "mx-scan" '#!/bin/bash
 if [ -z "$1" ]; then
     echo -e "\033[0;31mUso: mx-scan <IP/red>\033[0m"
@@ -132,7 +198,6 @@ echo "Escaneando: $1"
 nmap -sn $1
 '
 
-# Script: mx-clean
 create_script "mx-clean" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Cleaner ===\033[0m"
 sudo apt clean
@@ -143,19 +208,53 @@ sudo rm -rf /tmp/*
 echo -e "\033[0;32m✅ Limpieza completada.\033[0m"
 '
 
-# Script: mx-help
 create_script "mx-help" '#!/bin/bash
 echo -e "\033[0;31m=== Mx Root Terminal Help ===\033[0m"
 echo -e "\033[1;33mComandos disponibles:\033[0m"
 echo "  mx-info     - Muestra información del sistema"
 echo "  mx-update   - Actualiza todas las herramientas"
 echo "  mx-wifi     - Escanea redes WiFi disponibles"
-echo "  mx-scan     - Escanea una red con nmap (ej. mx-scan 192.168.1.0/24)"
+echo "  mx-scan     - Escanea una red con nmap"
 echo "  mx-clean    - Limpia archivos temporales y caché"
+echo "  mx-test     - Prueba todas las herramientas"
 echo "  mx-help     - Muestra esta ayuda"
 echo ""
 echo -e "\033[1;33mAlias:\033[0m"
 echo "  mx          - Navega a la carpeta del proyecto"
+echo "  mx-tools    - Muestra lista de herramientas instaladas"
+echo ""
+echo -e "\033[1;33mHerramientas instaladas:\033[0m"
+echo "  nmap, hydra, john, gobuster, nikto, netdiscover"
+echo "  aircrack-ng, sqlmap, wpscan, recon-ng, dnsrecon"
+echo "  enum4linux, wireshark, tcpdump, whois, dig"
+echo "  crunch, cewl, hashcat, medusa, metasploit (opcional)"
+'
+
+create_script "mx-test" '#!/bin/bash
+echo -e "\033[0;31m=== Mx Tools Test ===\033[0m"
+echo ""
+echo -e "\033[1;33m1. Probando nmap (escaneo de puertos en localhost)...\033[0m"
+nmap -p- localhost | head -10
+echo ""
+echo -e "\033[1;33m2. Probando john (benchmark)...\033[0m"
+john --test | head -3
+echo ""
+echo -e "\033[1;33m3. Probando netdiscover (dispositivos en red)...\033[0m"
+sudo netdiscover -r 192.168.0.0/24 | head -10
+echo ""
+echo -e "\033[1;33m4. Probando nikto (escaneo web en localhost)...\033[0m"
+sudo nikto -h http://localhost | head -10
+echo ""
+echo -e "\033[1;33m5. Probando sqlmap (detección de vulnerabilidades)...\033[0m"
+sqlmap --version | head -1
+echo ""
+echo -e "\033[1;33m6. Probando wpscan (escáner WordPress)...\033[0m"
+wpscan --help | head -3
+echo ""
+echo -e "\033[1;33m7. Probando aircrack-ng (suite WiFi)...\033[0m"
+aircrack-ng --help | head -3
+echo ""
+echo -e "\033[0;32m✅ Pruebas completadas.\033[0m"
 '
 
 echo ""
@@ -172,6 +271,6 @@ echo ""
 echo -e "${ROJO}=========================================${NC}"
 echo -e "${VERDE}✅ ¡Instalación completada, bro!${NC}"
 echo -e "${AMARILLO}➜ Cierra esta sesión y vuelve a abrir la terminal para ver los cambios.${NC}"
-echo -e "${AMARILLO}➜ Prueba los comandos: mx-info, mx-update, mx-wifi, mx-scan, mx-clean${NC}"
+echo -e "${AMARILLO}➜ Prueba los comandos: mx-info, mx-update, mx-test, mx-help${NC}"
 echo -e "${AMARILLO}➜ Para ver la ayuda: mx-help${NC}"
 echo -e "${ROJO}=========================================${NC}"
