@@ -31,3 +31,25 @@ Abre tu terminal de WSL y ejecuta:
 git clone https://github.com/Falconmx1/Mx-Root-Terminal
 cd Mx-Root-Terminal
 ./install.sh
+
+(El script detectará automáticamente que estás en WSL)
+
+📦 Herramientas Incluidas
+La terminal viene con un conjunto de herramientas preinstaladas y accesibles desde la línea de comandos:
+
+Escaneo de Redes: nmap, netdiscover
+
+Ataques de Fuerza Bruta: hydra, john
+
+Análisis Web: gobuster, nikto
+
+Utilidades de Red: curl, wget, netcat
+
+Scripts Propios: mx-info (Muestra info del sistema), mx-update (Actualiza herramientas).
+
+🎨 Personalización
+La terminal usa Zsh con el tema agnoster modificado para que coincida con el rojo de Kali. Puedes cambiar el tema editando el archivo ~/.zshrc.
+
+Para cambiar el color del prompt, busca la línea:
+PROMPT='%{$fg[red]%}┌──(root㉿Mx)-[%{$fg[blue]%}%~%{$fg[red]%}]
+%{$fg[red]%}└─%{$reset_color%}# '
