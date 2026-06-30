@@ -1,0 +1,15 @@
+#!/bin/bash
+# Mx WiFi - Escanea redes WiFi disponibles
+
+echo -e "\033[0;31m=== Mx WiFi Scanner ===\033[0m"
+echo "Escaneando redes WiFi disponibles..."
+
+# Detectar el sistema
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    sudo iwlist wlan0 scan | grep -E "ESSID|Quality"
+elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+    echo "En Windows, usa 'netsh wlan show networks' en CMD."
+    netsh wlan show networks
+else
+    echo "Sistema no soportado para este comando."
+fi
