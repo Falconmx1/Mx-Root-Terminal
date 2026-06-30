@@ -2,7 +2,7 @@
 
 # Mx Root Terminal - Script de Instalación
 # Autor: Falconmx1
-# Versión: 3.0.0
+# Versión: 3.1.0
 
 ROJO='\033[0;31m'
 VERDE='\033[0;32m'
@@ -57,7 +57,6 @@ sudo apt install -y \
     cewl \
     hashcat \
     medusa \
-    xpdf \
     foremost \
     binwalk \
     steghide \
@@ -80,7 +79,8 @@ sudo apt install -y \
     openssl \
     sshpass \
     scrot \
-    imagemagick
+    imagemagick \
+    nikto
 
 echo -e "${VERDE}   ✅ Herramientas adicionales instaladas.${NC}"
 echo ""
@@ -138,39 +138,44 @@ EOF
 echo -e "${VERDE}   ✅ Tema Mx Root configurado.${NC}"
 echo ""
 
-echo -e "${AZUL}➜ Creando scripts Mx...${NC}"
+echo -e "${AZUL}➜ Creando scripts Mx (método corregido)...${NC}"
 
+# Función mejorada para crear scripts SIN errores de comillas
 create_script() {
     local script_name=$1
     local script_content=$2
-    echo "$script_content" | sudo tee /usr/local/bin/$script_name > /dev/null
+    
+    # Usamos sudo bash -c para evitar problemas con las comillas
+    sudo bash -c "cat > /usr/local/bin/$script_name << 'EOF'
+$script_content
+EOF"
     sudo chmod +x /usr/local/bin/$script_name
     echo -e "${VERDE}   ✅ $script_name creado.${NC}"
 }
 
+# Script: mx-info (versión CORREGIDA)
 create_script "mx-info" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Info ===\033[0m"
 echo "Hostname: $(hostname)"
 echo "Usuario: $(whoami)"
-DISTRO=""
 if command -v lsb_release &> /dev/null; then
     DISTRO=$(lsb_release -ds)
 else
-    DISTRO=$(cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d= -f2 | tr -d "\""")
+    DISTRO=$(cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d= -f2 | tr -d "\"")
 fi
 echo "Distro: $DISTRO"
 echo "Kernel: $(uname -r)"
 echo "Uptime: $(uptime -p)"
-echo "Shell: $SHELL"
-'
+echo "Shell: $SHELL"'
 
+# Script: mx-update
 create_script "mx-update" '#!/bin/bash
 echo -e "\033[0;31mActualizando herramientas de Mx Root Terminal...\033[0m"
 sudo apt update && sudo apt upgrade -y
 sudo apt autoremove -y
-echo -e "\033[0;32m✅ ¡Actualización completada!\033[0m"
-'
+echo -e "\033[0;32m✅ ¡Actualización completada!\033[0m"'
 
+# Script: mx-wifi
 create_script "mx-wifi" '#!/bin/bash
 echo -e "\033[0;31m=== Mx WiFi Scanner ===\033[0m"
 echo "Escaneando redes WiFi disponibles..."
@@ -184,9 +189,9 @@ elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
     netsh wlan show networks
 else
     echo "⚠️  Sistema no soportado para este comando."
-fi
-'
+fi'
 
+# Script: mx-scan
 create_script "mx-scan" '#!/bin/bash
 if [ -z "$1" ]; then
     echo -e "\033[0;31mUso: mx-scan <IP/red>\033[0m"
@@ -195,9 +200,9 @@ if [ -z "$1" ]; then
 fi
 echo -e "\033[0;31m=== Mx Network Scan ===\033[0m"
 echo "Escaneando: $1"
-nmap -sn $1
-'
+nmap -sn $1'
 
+# Script: mx-clean
 create_script "mx-clean" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Cleaner ===\033[0m"
 sudo apt clean
@@ -205,9 +210,9 @@ sudo apt autoclean
 sudo apt autoremove -y
 > ~/.bash_history
 sudo rm -rf /tmp/*
-echo -e "\033[0;32m✅ Limpieza completada.\033[0m"
-'
+echo -e "\033[0;32m✅ Limpieza completada.\033[0m"'
 
+# Script: mx-help
 create_script "mx-help" '#!/bin/bash
 echo -e "\033[0;31m=== Mx Root Terminal Help ===\033[0m"
 echo -e "\033[1;33mComandos disponibles:\033[0m"
@@ -227,9 +232,9 @@ echo -e "\033[1;33mHerramientas instaladas:\033[0m"
 echo "  nmap, hydra, john, gobuster, nikto, netdiscover"
 echo "  aircrack-ng, sqlmap, wpscan, recon-ng, dnsrecon"
 echo "  enum4linux, wireshark, tcpdump, whois, dig"
-echo "  crunch, cewl, hashcat, medusa, metasploit (opcional)"
-'
+echo "  crunch, cewl, hashcat, medusa"'
 
+# Script: mx-test
 create_script "mx-test" '#!/bin/bash
 echo -e "\033[0;31m=== Mx Tools Test ===\033[0m"
 echo ""
@@ -254,8 +259,7 @@ echo ""
 echo -e "\033[1;33m7. Probando aircrack-ng (suite WiFi)...\033[0m"
 aircrack-ng --help | head -3
 echo ""
-echo -e "\033[0;32m✅ Pruebas completadas.\033[0m"
-'
+echo -e "\033[0;32m✅ Pruebas completadas.\033[0m"'
 
 echo ""
 
