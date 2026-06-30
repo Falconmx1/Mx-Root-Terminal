@@ -2,16 +2,14 @@
 
 # Mx Root Terminal - Script de Instalación
 # Autor: Falconmx1
-# Versión: 1.2.0
+# Versión: 1.3.0
 
-# Colores para mejor visualización
 ROJO='\033[0;31m'
 VERDE='\033[0;32m'
 AMARILLO='\033[1;33m'
 AZUL='\033[0;34m'
-NC='\033[0m' # Sin Color
+NC='\033[0m'
 
-# Mostrar banner
 echo -e "${ROJO}"
 echo "  ███╗   ███╗██╗  ██╗"
 echo "  ████╗ ████║╚██╗██╔╝"
@@ -23,25 +21,20 @@ echo -e "${NC}"
 echo -e "${ROJO}⚡ Instalando Mx Root Terminal...${NC}"
 echo ""
 
-# 1. Detectar el sistema operativo
 echo -e "${AZUL}➜ Detectando sistema operativo...${NC}"
 if grep -q Microsoft /proc/version; then
     echo -e "${VERDE}   ✅ Sistema WSL detectado.${NC}"
-    ES_WSL=true
 else
     echo -e "${VERDE}   ✅ Sistema Linux nativo detectado.${NC}"
-    ES_WSL=false
 fi
 echo ""
 
-# 2. Actualizar e instalar dependencias
 echo -e "${AZUL}➜ Actualizando paquetes e instalando herramientas...${NC}"
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y zsh git wget curl nmap netdiscover hydra john gobuster nikto netcat-openbsd
 echo -e "${VERDE}   ✅ Herramientas instaladas correctamente.${NC}"
 echo ""
 
-# 3. Instalar Oh My Zsh (de forma no interactiva)
 echo -e "${AZUL}➜ Instalando Oh My Zsh...${NC}"
 if [ -d "$HOME/.oh-my-zsh" ]; then
     echo -e "${AMARILLO}   ⚠️  Oh My Zsh ya está instalado. Saltando...${NC}"
@@ -51,28 +44,22 @@ else
 fi
 echo ""
 
-# 4. Configurar el tema personalizado de Mx
 echo -e "${AZUL}➜ Configurando tema Mx Root...${NC}"
 ZSHRC_PATH="$HOME/.zshrc"
-
-# Crear respaldo si no existe
 if [ ! -f "${ZSHRC_PATH}.bak" ]; then
     cp $ZSHRC_PATH ${ZSHRC_PATH}.bak
     echo -e "${VERDE}   ✅ Respaldo creado en ${ZSHRC_PATH}.bak${NC}"
 fi
 
-# Escribir la nueva configuración
 cat >> $ZSHRC_PATH << 'EOF'
 
 # ============================================
 # Mx Root Terminal Custom Configuration
 # ============================================
 
-# Prompt personalizado estilo Kali
 PROMPT='%{$fg[red]%}┌──(root㉿Mx)-[%{$fg[blue]%}%~%{$fg[red]%}]
 %{$fg[red]%}└─%{$reset_color%}# '
 
-# Alias útiles
 alias mx='cd ~/Mx-Root-Terminal'
 alias mx-help='echo "Comandos Mx: mx-info, mx-update, mx-wifi, mx-scan, mx-clean"'
 
@@ -81,20 +68,16 @@ EOF
 echo -e "${VERDE}   ✅ Tema Mx Root configurado.${NC}"
 echo ""
 
-# 5. Crear scripts personalizados
 echo -e "${AZUL}➜ Creando scripts Mx...${NC}"
 
-# Función para crear scripts con sudo
 create_script() {
     local script_name=$1
     local script_content=$2
-    
     echo "$script_content" | sudo tee /usr/local/bin/$script_name > /dev/null
     sudo chmod +x /usr/local/bin/$script_name
     echo -e "${VERDE}   ✅ $script_name creado.${NC}"
 }
 
-# Script: mx-info (VERSIÓN CORREGIDA)
 create_script "mx-info" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Info ===\033[0m"
 echo "Hostname: $(hostname)"
@@ -109,14 +92,12 @@ echo "Uptime: $(uptime -p)"
 echo "Shell: $SHELL"
 '
 
-# Script: mx-update
 create_script "mx-update" '#!/bin/bash
 echo -e "\033[0;31mActualizando herramientas de Mx Root Terminal...\033[0m"
 sudo apt update && sudo apt upgrade -y
 echo -e "\033[0;32m✅ ¡Actualización completada!\033[0m"
 '
 
-# Script: mx-wifi
 create_script "mx-wifi" '#!/bin/bash
 echo -e "\033[0;31m=== Mx WiFi Scanner ===\033[0m"
 echo "Escaneando redes WiFi disponibles..."
@@ -133,7 +114,6 @@ else
 fi
 '
 
-# Script: mx-scan
 create_script "mx-scan" '#!/bin/bash
 if [ -z "$1" ]; then
     echo -e "\033[0;31mUso: mx-scan <IP/red>\033[0m"
@@ -145,7 +125,6 @@ echo "Escaneando: $1"
 nmap -sn $1
 '
 
-# Script: mx-clean
 create_script "mx-clean" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Cleaner ===\033[0m"
 sudo apt clean
@@ -156,7 +135,6 @@ sudo rm -rf /tmp/*
 echo -e "\033[0;32m✅ Limpieza completada.\033[0m"
 '
 
-# Script: mx-help
 create_script "mx-help" '#!/bin/bash
 echo -e "\033[0;31m=== Mx Root Terminal Help ===\033[0m"
 echo -e "\033[1;33mComandos disponibles:\033[0m"
@@ -173,7 +151,6 @@ echo "  mx          - Navega a la carpeta del proyecto"
 
 echo ""
 
-# 6. Cambiar la shell por defecto a zsh
 echo -e "${AZUL}➜ Estableciendo Zsh como shell por defecto...${NC}"
 if [[ "$SHELL" != *"zsh"* ]]; then
     sudo chsh -s $(which zsh) $USER
@@ -183,7 +160,6 @@ else
 fi
 echo ""
 
-# 7. Mensaje final
 echo -e "${ROJO}=========================================${NC}"
 echo -e "${VERDE}✅ ¡Instalación completada, bro!${NC}"
 echo -e "${AMARILLO}➜ Cierra esta sesión y vuelve a abrir la terminal para ver los cambios.${NC}"
