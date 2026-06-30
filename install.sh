@@ -2,7 +2,7 @@
 
 # Mx Root Terminal - Script de Instalación
 # Autor: Falconmx1
-# Versión: 1.3.0
+# Versión: 2.0.0
 
 ROJO='\033[0;31m'
 VERDE='\033[0;32m'
@@ -70,6 +70,7 @@ echo ""
 
 echo -e "${AZUL}➜ Creando scripts Mx...${NC}"
 
+# Función para crear scripts
 create_script() {
     local script_name=$1
     local script_content=$2
@@ -78,26 +79,31 @@ create_script() {
     echo -e "${VERDE}   ✅ $script_name creado.${NC}"
 }
 
+# Script: mx-info (VERSIÓN CORREGIDA Y PROBADA)
 create_script "mx-info" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Info ===\033[0m"
 echo "Hostname: $(hostname)"
 echo "Usuario: $(whoami)"
+DISTRO=""
 if command -v lsb_release &> /dev/null; then
-    echo "Distro: $(lsb_release -ds)"
+    DISTRO=$(lsb_release -ds)
 else
-    echo "Distro: $(cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d= -f2 | tr -d "\""")"
+    DISTRO=$(cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d= -f2 | tr -d "\""")
 fi
+echo "Distro: $DISTRO"
 echo "Kernel: $(uname -r)"
 echo "Uptime: $(uptime -p)"
 echo "Shell: $SHELL"
 '
 
+# Script: mx-update
 create_script "mx-update" '#!/bin/bash
 echo -e "\033[0;31mActualizando herramientas de Mx Root Terminal...\033[0m"
 sudo apt update && sudo apt upgrade -y
 echo -e "\033[0;32m✅ ¡Actualización completada!\033[0m"
 '
 
+# Script: mx-wifi
 create_script "mx-wifi" '#!/bin/bash
 echo -e "\033[0;31m=== Mx WiFi Scanner ===\033[0m"
 echo "Escaneando redes WiFi disponibles..."
@@ -114,6 +120,7 @@ else
 fi
 '
 
+# Script: mx-scan
 create_script "mx-scan" '#!/bin/bash
 if [ -z "$1" ]; then
     echo -e "\033[0;31mUso: mx-scan <IP/red>\033[0m"
@@ -125,6 +132,7 @@ echo "Escaneando: $1"
 nmap -sn $1
 '
 
+# Script: mx-clean
 create_script "mx-clean" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Cleaner ===\033[0m"
 sudo apt clean
@@ -135,6 +143,7 @@ sudo rm -rf /tmp/*
 echo -e "\033[0;32m✅ Limpieza completada.\033[0m"
 '
 
+# Script: mx-help
 create_script "mx-help" '#!/bin/bash
 echo -e "\033[0;31m=== Mx Root Terminal Help ===\033[0m"
 echo -e "\033[1;33mComandos disponibles:\033[0m"
