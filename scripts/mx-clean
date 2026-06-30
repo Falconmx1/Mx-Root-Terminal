@@ -1,0 +1,19 @@
+#!/bin/bash
+# Mx Clean - Limpia archivos temporales y caché
+
+echo -e "\033[0;31m=== Mx System Cleaner ===\033[0m"
+
+# Limpiar caché de apt
+sudo apt clean
+sudo apt autoclean
+sudo apt autoremove -y
+
+# Limpiar historial de bash
+> ~/.bash_history
+echo "Historial de bash limpiado."
+
+# Limpiar archivos temporales
+rm -rf /tmp/*
+echo "Archivos temporales eliminados."
+
+echo -e "\033[0;32m✅ Limpieza completada.\033[0m"
