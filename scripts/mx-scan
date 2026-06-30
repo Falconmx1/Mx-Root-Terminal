@@ -1,0 +1,12 @@
+#!/bin/bash
+# Mx Scan - Escaneo rápido de red con nmap
+
+if [ -z "$1" ]; then
+    echo -e "\033[0;31mUso: mx-scan <IP/red>\033[0m"
+    echo "Ejemplo: mx-scan 192.168.1.0/24"
+    exit 1
+fi
+
+echo -e "\033[0;31m=== Mx Network Scan ===\033[0m"
+echo "Escaneando: $1"
+nmap -sn $1
