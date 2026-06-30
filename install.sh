@@ -2,7 +2,7 @@
 
 # Mx Root Terminal - Script de Instalación
 # Autor: Falconmx1
-# Versión: 1.1.0
+# Versión: 1.2.0
 
 # Colores para mejor visualización
 ROJO='\033[0;31m'
@@ -61,7 +61,7 @@ if [ ! -f "${ZSHRC_PATH}.bak" ]; then
     echo -e "${VERDE}   ✅ Respaldo creado en ${ZSHRC_PATH}.bak${NC}"
 fi
 
-# Escribir la nueva configuración (sin borrar configuraciones previas importantes)
+# Escribir la nueva configuración
 cat >> $ZSHRC_PATH << 'EOF'
 
 # ============================================
@@ -81,7 +81,7 @@ EOF
 echo -e "${VERDE}   ✅ Tema Mx Root configurado.${NC}"
 echo ""
 
-# 5. Crear scripts personalizados (CON SUDO PARA EVITAR ERRORES)
+# 5. Crear scripts personalizados
 echo -e "${AZUL}➜ Creando scripts Mx...${NC}"
 
 # Función para crear scripts con sudo
@@ -94,12 +94,16 @@ create_script() {
     echo -e "${VERDE}   ✅ $script_name creado.${NC}"
 }
 
-# Script: mx-info
+# Script: mx-info (VERSIÓN CORREGIDA)
 create_script "mx-info" '#!/bin/bash
 echo -e "\033[0;31m=== Mx System Info ===\033[0m"
 echo "Hostname: $(hostname)"
 echo "Usuario: $(whoami)"
-echo "Distro: $(lsb_release -ds 2>/dev/null || cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d= -f2 | tr -d "\""")"
+if command -v lsb_release &> /dev/null; then
+    echo "Distro: $(lsb_release -ds)"
+else
+    echo "Distro: $(cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d= -f2 | tr -d "\""")"
+fi
 echo "Kernel: $(uname -r)"
 echo "Uptime: $(uptime -p)"
 echo "Shell: $SHELL"
@@ -114,7 +118,6 @@ echo -e "\033[0;32m✅ ¡Actualización completada!\033[0m"
 
 # Script: mx-wifi
 create_script "mx-wifi" '#!/bin/bash
-# Mx WiFi - Escanea redes WiFi disponibles
 echo -e "\033[0;31m=== Mx WiFi Scanner ===\033[0m"
 echo "Escaneando redes WiFi disponibles..."
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -132,7 +135,6 @@ fi
 
 # Script: mx-scan
 create_script "mx-scan" '#!/bin/bash
-# Mx Scan - Escaneo rápido de red con nmap
 if [ -z "$1" ]; then
     echo -e "\033[0;31mUso: mx-scan <IP/red>\033[0m"
     echo "Ejemplo: mx-scan 192.168.1.0/24"
@@ -145,17 +147,16 @@ nmap -sn $1
 
 # Script: mx-clean
 create_script "mx-clean" '#!/bin/bash
-# Mx Clean - Limpia archivos temporales y caché
 echo -e "\033[0;31m=== Mx System Cleaner ===\033[0m"
 sudo apt clean
 sudo apt autoclean
 sudo apt autoremove -y
 > ~/.bash_history
-rm -rf /tmp/*
+sudo rm -rf /tmp/*
 echo -e "\033[0;32m✅ Limpieza completada.\033[0m"
 '
 
-# Script: mx-help (menú de ayuda)
+# Script: mx-help
 create_script "mx-help" '#!/bin/bash
 echo -e "\033[0;31m=== Mx Root Terminal Help ===\033[0m"
 echo -e "\033[1;33mComandos disponibles:\033[0m"
