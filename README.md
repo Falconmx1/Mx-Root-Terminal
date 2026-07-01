@@ -71,6 +71,9 @@ dpkg -l | grep -E "nmap|hydra|john|gobuster|nikto|aircrack|sqlmap|wpscan|metaspl
 # Actualizar paquetes
 mx-update
 
+# Ver info del sistema
+mx-info
+
 
 📋 Lista completa de herramientas incluidas
 Herramientas de red y escaneo
