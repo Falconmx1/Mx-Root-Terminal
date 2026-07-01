@@ -175,4 +175,11 @@ debsums - Verificación de paquetes
 xpdf - Visor de PDF (para análisis de documentos)
 
 
+⚠️ Notas importantes
+Metasploit y Burp Suite son opcionales porque pesan mucho (~500MB cada uno)
 
+Algunas herramientas requieren permisos root (usar sudo)
+
+wpscan necesita API token para funcionar correctamente (puedes obtener uno gratis en su web)
+
+aircrack-ng necesita una interfaz WiFi en modo monitor (no funciona en WSL)
