@@ -53,3 +53,126 @@ La terminal usa Zsh con el tema agnoster modificado para que coincida con el roj
 Para cambiar el color del prompt, busca la línea:
 PROMPT='%{$fg[red]%}┌──(root㉿Mx)-[%{$fg[blue]%}%~%{$fg[red]%}]
 %{$fg[red]%}└─%{$reset_color%}# '
+
+🎯 Prueba rápida después de instalar
+
+# Ver todas las herramientas instaladas
+mx-tools
+
+# Probar las herramientas
+mx-test
+
+# Ver ayuda completa
+mx-help
+
+# Listar todas las herramientas instaladas
+dpkg -l | grep -E "nmap|hydra|john|gobuster|nikto|aircrack|sqlmap|wpscan|metasploit|burp" | awk '{print $2}'
+
+# Actualizar paquetes
+mx-update
+
+
+📋 Lista completa de herramientas incluidas
+Herramientas de red y escaneo
+nmap - Escaneo de puertos y redes
+
+netdiscover - Descubrimiento de dispositivos en red
+
+dnsrecon - Escaneo DNS
+
+enum4linux - Enumeración de servicios SMB
+
+smbclient - Cliente SMB
+
+tcpdump - Captura de paquetes
+
+wireshark - Analizador de tráfico (GUI)
+
+Herramientas de seguridad y hacking
+hydra - Fuerza bruta
+
+john - Cracker de contraseñas
+
+hashcat - Cracker de contraseñas (GPU)
+
+medusa - Fuerza bruta
+
+aircrack-ng - Suite para auditoría WiFi
+
+sqlmap - Detección de SQL Injection
+
+wpscan - Escáner para WordPress
+
+recon-ng - Reconocimiento web
+
+nikto - Escáner de vulnerabilidades web
+
+gobuster - Descubrimiento de directorios web
+
+metasploit-framework - Framework de explotación (opcional)
+
+burpsuite - Proxy para análisis web (opcional)
+
+Herramientas de análisis y forense
+exploitdb - Base de datos de exploits
+
+crunch - Generador de diccionarios
+
+cewl - Generador de diccionarios desde webs
+
+foremost - Recuperación de archivos
+
+binwalk - Análisis de firmware
+
+steghide - Esteganografía
+
+exiftool - Metadatos de archivos
+
+yara - Escaneo de malware
+
+clamav - Antivirus
+
+rkhunter - Detección de rootkits
+
+chkrootkit - Detección de rootkits
+
+lynis - Auditoría de seguridad
+
+Utilidades generales
+whois - Consulta WHOIS
+
+dnsutils - Herramientas DNS (nslookup, dig)
+
+openssl - Criptografía
+
+sshpass - SSH con contraseña
+
+macchanger - Cambiar MAC address
+
+torsocks - Proxy Tor
+
+proxychains - Proxy chains
+
+iptables - Firewall
+
+ufw - Firewall simplificado
+
+fail2ban - Protección contra ataques
+
+secure-delete - Borrado seguro
+
+scrot - Capturas de pantalla
+
+imagemagick - Manipulación de imágenes
+
+ffmpeg - Procesamiento de audio/video
+
+Herramientas de hardening y mantenimiento
+auditd - Auditoría del sistema
+
+debsums - Verificación de paquetes
+
+xpdf - Visor de PDF (para análisis de documentos)
+
+
+
